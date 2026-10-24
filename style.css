@@ -1,0 +1,121 @@
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#0b0f14;color:#e9eef2;font-family:"Segoe UI",Roboto,Arial,sans-serif;touch-action:none;overscroll-behavior:none}
+#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.hidden{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+
+/* screens */
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(5,8,12,.35),rgba(5,8,12,.85));z-index:20;padding:12px}
+.panel{background:rgba(14,20,26,.82);border:1px solid rgba(255,196,64,.35);border-radius:10px;padding:22px 28px;min-width:300px;max-width:720px;max-height:96vh;overflow:auto;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+.panel.title{background:rgba(10,14,18,.35);border:none;box-shadow:none;backdrop-filter:none}
+h1{font-size:clamp(38px,8vw,84px);letter-spacing:.08em;font-weight:900;background:linear-gradient(180deg,#ffe08a,#ff8a1f 60%,#b33a00);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(255,140,30,.25);filter:drop-shadow(0 4px 0 rgba(0,0,0,.6))}
+h3{letter-spacing:.6em;color:#9fb3c2;font-weight:600;margin:4px 0 18px;font-size:clamp(12px,2vw,16px)}
+h2{letter-spacing:.12em;margin-bottom:14px;color:#ffc440;font-size:clamp(18px,3vw,26px)}
+.col{display:flex;flex-direction:column;gap:10px;align-items:center;margin:8px 0}
+.panel button{background:linear-gradient(180deg,#2b3946,#1a242d);border:1px solid #4b6070;border-radius:6px;padding:10px 20px;min-width:220px;letter-spacing:.12em;font-weight:700;transition:transform .08s,background .15s}
+.panel button:hover{background:linear-gradient(180deg,#3a4c5c,#22303b);border-color:#ffc440}
+.panel button:active{transform:scale(.97)}
+.panel button.big{background:linear-gradient(180deg,#ff9d2b,#c45a00);border-color:#ffd27a;color:#1b0e00;font-size:18px;padding:13px 24px}
+.panel button:disabled{opacity:.35;cursor:not-allowed}
+.meta{margin-top:12px;color:#ffd166;letter-spacing:.1em;font-weight:600}
+.meta.big{font-size:22px;margin:0 0 12px}
+.note{color:#8aa0b0;font-size:13px;margin:10px 0}
+.back{margin-top:6px}
+#levelGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:6px}
+#levelGrid button{min-width:0;padding:12px 4px;font-size:15px}
+#levelGrid button small{display:block;font-size:10px;letter-spacing:.05em;opacity:.8;font-weight:500;margin-top:3px}
+#levelGrid button.boss{border-color:#ff5a3c;color:#ffb3a3}
+#shopList{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.04);border-radius:6px;padding:8px 12px;text-align:left}
+.item b{display:block;letter-spacing:.08em}
+.item small{color:#9fb3c2}
+.item button{min-width:120px!important;padding:8px 10px!important}
+.help{text-align:left;max-width:640px}
+.help p{margin:8px 0;color:#c8d4dc;line-height:1.4}
+.help table{width:100%;border-collapse:collapse;font-size:14px}
+.help td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.08)}
+.help td:first-child{color:#ffc440;font-weight:700}
+.help .back{display:block;margin:10px auto 0}
+#endStats{margin:6px 0 12px;line-height:1.7;color:#d6e2ea;font-size:16px}
+#endStats b{color:#ffd166}
+
+/* HUD */
+#hud{position:fixed;inset:0;pointer-events:none;z-index:10;font-weight:700;text-shadow:0 1px 2px #000}
+#hudTL{position:absolute;left:max(14px,env(safe-area-inset-left));top:12px;width:min(270px,34vw)}
+.bar{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px;letter-spacing:.1em}
+.bar .lbl{width:52px;color:#b9c7d1}
+.track{flex:1;height:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);border-radius:3px;overflow:hidden}
+.fill{height:100%;width:100%;transition:width .12s}
+.fill.hp{background:linear-gradient(90deg,#3ddc6a,#a8f04a)}
+.fill.sh{background:linear-gradient(90deg,#2fb8ff,#8ae6ff);width:0}
+.fill.base{background:linear-gradient(90deg,#ffb020,#ffe066)}
+.num{width:30px;text-align:right;font-size:12px}
+#hudTC{position:absolute;top:10px;left:50%;transform:translateX(-50%);text-align:center}
+#waveTxt{font-size:20px;letter-spacing:.15em;color:#ffc440}
+#leftTxt{font-size:13px;letter-spacing:.12em;color:#ff8a7a}
+#hudTR{position:absolute;right:max(14px,env(safe-area-inset-right));top:10px;text-align:right;display:flex;align-items:center;gap:14px}
+#scoreTxt{font-size:22px;letter-spacing:.05em}
+#coinTxt{font-size:16px;color:#ffd166}
+#pauseBtn{pointer-events:auto;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.35);font-weight:900}
+#radar{position:absolute;left:max(14px,env(safe-area-inset-left));top:78px;width:120px;height:120px;border-radius:50%;opacity:.9}
+#hudBR{position:absolute;right:max(20px,env(safe-area-inset-right));bottom:18px;text-align:right}
+#wpnTxt{font-size:13px;letter-spacing:.15em;color:#b9c7d1}
+#ammoTxt{font-size:34px}
+#reloadBar{height:4px;width:160px;background:rgba(0,0,0,.5);margin-left:auto;margin-top:2px;visibility:hidden}
+#reloadFill{height:100%;background:#ffc440;width:0}
+#abilities{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:10px}
+.ab{position:relative;width:74px;height:50px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;font-size:10px;letter-spacing:.1em}
+.ab b{font-size:16px;color:#ffc440}
+.ab .cd{position:absolute;left:0;bottom:0;width:100%;height:0;background:rgba(0,0,0,.65)}
+.ab.ready{border-color:#ffc440;box-shadow:0 0 10px rgba(255,196,64,.4)}
+.ab.off{opacity:.35}
+#bossBar{position:absolute;top:62px;left:50%;transform:translateX(-50%);width:min(520px,60vw);text-align:center}
+#bossName{color:#ff6a50;letter-spacing:.3em;font-size:13px;margin-bottom:3px}
+#bossBar .track{height:12px;border-color:#ff6a50}
+#bossFill{height:100%;width:100%;background:linear-gradient(90deg,#ff2a1a,#ff8a40)}
+#crosshair{position:absolute;left:50%;top:50%;width:0;height:0}
+#crosshair i{position:absolute;background:#fff;box-shadow:0 0 2px #000;transition:all .06s}
+#crosshair i:nth-child(1){left:-1px;top:-14px;width:2px;height:8px}
+#crosshair i:nth-child(2){left:-1px;top:6px;width:2px;height:8px}
+#crosshair i:nth-child(3){top:-1px;left:-14px;width:8px;height:2px}
+#crosshair i:nth-child(4){top:-1px;left:6px;width:8px;height:2px}
+#crosshair::after{content:"";position:absolute;left:-2px;top:-2px;width:4px;height:4px;border-radius:50%;background:#ff4040}
+#hitmarker{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;opacity:0;background:
+ linear-gradient(45deg,transparent 45%,#fff 45%,#fff 55%,transparent 55%),linear-gradient(-45deg,transparent 45%,#fff 45%,#fff 55%,transparent 55%);
+ -webkit-mask:radial-gradient(circle,transparent 5px,#000 6px);mask:radial-gradient(circle,transparent 5px,#000 6px)}
+#hitmarker.show{opacity:1}
+#hitmarker.kill{filter:drop-shadow(0 0 2px red) hue-rotate(0deg);background:
+ linear-gradient(45deg,transparent 43%,#ff3b30 43%,#ff3b30 57%,transparent 57%),linear-gradient(-45deg,transparent 43%,#ff3b30 43%,#ff3b30 57%,transparent 57%)}
+#banner{position:absolute;top:28%;left:0;right:0;text-align:center;opacity:0;transition:opacity .3s}
+#banner.show{opacity:1}
+#banner h2{font-size:clamp(28px,5vw,52px);letter-spacing:.2em;color:#ffc440;text-shadow:0 2px 0 #000,0 0 24px rgba(255,140,0,.6);margin:0}
+#banner p{font-size:clamp(13px,2vw,18px);letter-spacing:.3em;color:#e0e8ee}
+#banner.red h2{color:#ff4a3a;text-shadow:0 2px 0 #000,0 0 24px rgba(255,0,0,.6)}
+#dmgVig{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(200,0,0,.75))}
+#shieldVig{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at center,transparent 60%,rgba(40,170,255,.45));transition:opacity .2s}
+
+/* touch */
+#touch{position:fixed;inset:0;z-index:11;pointer-events:none}
+#joyBase{position:absolute;left:60px;bottom:50px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.25);pointer-events:none}
+#joyKnob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,255,255,.35);border:2px solid rgba(255,255,255,.6)}
+.tb{position:absolute;pointer-events:auto;border-radius:50%;background:rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.45);font-weight:900;letter-spacing:.08em;touch-action:none}
+#tFire{right:max(36px,env(safe-area-inset-right));bottom:70px;width:104px;height:104px;background:rgba(255,80,40,.35);border-color:#ff8a5a;font-size:16px}
+#tFire.on{background:rgba(255,80,40,.6)}
+.tb.sm{width:58px;height:58px;font-size:24px}
+#tReload{right:max(160px,calc(env(safe-area-inset-right) + 140px));bottom:40px}
+#tAir{right:max(170px,calc(env(safe-area-inset-right) + 150px));bottom:118px}
+#tShield{right:max(120px,calc(env(safe-area-inset-right) + 100px));bottom:190px}
+.tb.cool{opacity:.35}
+#tWeapons{position:absolute;right:max(14px,env(safe-area-inset-right));top:60px;display:flex;gap:6px;pointer-events:auto}
+.tw{padding:8px 10px;border-radius:6px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.35);font-size:12px;font-weight:800;letter-spacing:.08em;touch-action:none}
+.tw.on{border-color:#ffc440;color:#ffc440}
+body.touch #hudBR{bottom:auto;top:104px}
+body.touch #abilities{bottom:auto;top:56px;transform:translateX(-50%) scale(.8)}
+body.touch #ammoTxt{font-size:24px}
+body.touch #radar{width:90px;height:90px}
+body.touch #hudTC{top:4px}
+body.touch #bossBar{top:110px}
+#rotate{display:none;position:fixed;inset:0;z-index:50;background:#0b0f14;align-items:center;justify-content:center;text-align:center;font-size:22px;letter-spacing:.1em;color:#ffc440}
+#rotate div{font-size:20px;line-height:2}
+@media (orientation:portrait){ body.touch #rotate{display:flex} }
+@media (max-height:500px){ .panel{padding:12px 18px} h1{font-size:44px} h3{margin-bottom:8px} .col{gap:6px} .panel button{padding:7px 16px} .panel button.big{padding:9px 20px;font-size:16px} #levelGrid button{padding:8px 4px} }

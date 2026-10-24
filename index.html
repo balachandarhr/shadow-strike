@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>SHADOW STRIKE – World Warfare</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- HUD -->
+<div id="hud" class="hidden">
+  <div id="hudTL">
+    <div class="bar"><span class="lbl">HP</span><div class="track"><div id="hpFill" class="fill hp"></div></div><span id="hpTxt" class="num">100</span></div>
+    <div class="bar"><span class="lbl">SHIELD</span><div class="track"><div id="shFill" class="fill sh"></div></div></div>
+    <div class="bar"><span class="lbl">BASE</span><div class="track"><div id="baseFill" class="fill base"></div></div></div>
+  </div>
+  <div id="hudTC">
+    <div id="waveTxt">WAVE 1/3</div>
+    <div id="leftTxt">ENEMIES 0</div>
+  </div>
+  <div id="hudTR">
+    <div id="scoreTxt">0</div>
+    <div id="coinTxt">● 0</div>
+    <button id="pauseBtn" title="Pause (P)">II</button>
+  </div>
+  <canvas id="radar" width="140" height="140"></canvas>
+  <div id="hudBR">
+    <div id="wpnTxt">M4 MACHINE GUN</div>
+    <div id="ammoTxt">40 / 40</div>
+    <div id="reloadBar"><div id="reloadFill"></div></div>
+  </div>
+  <div id="abilities">
+    <div class="ab" id="abAir"><b>Q</b><span>AIRSTRIKE</span><div class="cd" id="cdAir"></div></div>
+    <div class="ab" id="abShield"><b>E</b><span>SHIELD</span><div class="cd" id="cdShield"></div></div>
+    <div class="ab" id="abDrone"><b>◆</b><span>DRONE</span><div class="cd" id="cdDrone"></div></div>
+  </div>
+  <div id="bossBar" class="hidden"><div id="bossName">IRON GOLIATH</div><div class="track"><div id="bossFill"></div></div></div>
+  <div id="crosshair"><i></i><i></i><i></i><i></i></div>
+  <div id="hitmarker"></div>
+  <div id="banner"><h2 id="bannerT"></h2><p id="bannerS"></p></div>
+  <div id="dmgVig"></div>
+  <div id="shieldVig"></div>
+</div>
+
+<!-- Touch controls -->
+<div id="touch" class="hidden">
+  <div id="joyBase"><div id="joyKnob"></div></div>
+  <button class="tb" id="tFire">FIRE</button>
+  <button class="tb sm" id="tReload">⟳</button>
+  <button class="tb sm" id="tAir">✈</button>
+  <button class="tb sm" id="tShield">⛨</button>
+  <div id="tWeapons"><button class="tw" data-w="0">MG</button><button class="tw" data-w="1">RIFLE</button><button class="tw" data-w="2">ROCKET</button></div>
+</div>
+
+<!-- Menus -->
+<div id="menu" class="screen">
+  <div class="panel title">
+    <h1>SHADOW STRIKE</h1>
+    <h3>WORLD WARFARE</h3>
+    <div class="col">
+      <button class="big" id="bCampaign">▶ CAMPAIGN</button>
+      <button class="big" id="bSurvival">☠ SURVIVAL</button>
+      <button id="bShop">ARMORY</button>
+      <button id="bHelp">HOW TO PLAY</button>
+    </div>
+    <div class="meta"><span id="menuCoins">● 0</span> · <span id="menuBest">BEST SURVIVAL 0</span></div>
+  </div>
+</div>
+
+<div id="levels" class="screen hidden">
+  <div class="panel">
+    <h2>WORLD 1 · MILITARY TRAINING CAMP</h2>
+    <div id="levelGrid"></div>
+    <p class="note">Levels 1–10 are playable in this web demo. Every 10th level is a boss fight.</p>
+    <button class="back">◀ BACK</button>
+  </div>
+</div>
+
+<div id="shop" class="screen hidden">
+  <div class="panel">
+    <h2>ARMORY</h2>
+    <div class="meta big"><span id="shopCoins">● 0</span></div>
+    <div id="shopList"></div>
+    <button class="back">◀ BACK</button>
+  </div>
+</div>
+
+<div id="help" class="screen hidden">
+  <div class="panel help">
+    <h2>HOW TO PLAY</h2>
+    <p>Defend the <b>command center</b> from waves of enemy soldiers, heavies and vehicles. Survive every wave to complete the mission. Level 10 ends with a boss.</p>
+    <table>
+      <tr><td>Move</td><td>W A S D (Shift = sprint)</td><td>Left joystick</td></tr>
+      <tr><td>Aim</td><td>Mouse (click to lock)</td><td>Drag right side</td></tr>
+      <tr><td>Fire</td><td>Left click</td><td>FIRE (drag to aim)</td></tr>
+      <tr><td>Aim down sights</td><td>Right click</td><td>—</td></tr>
+      <tr><td>Reload</td><td>R</td><td>⟳</td></tr>
+      <tr><td>Weapons</td><td>1 MG · 2 Rifle · 3 Rocket</td><td>MG / RIFLE / ROCKET</td></tr>
+      <tr><td>Airstrike</td><td>Q (at crosshair)</td><td>✈</td></tr>
+      <tr><td>Shield</td><td>E</td><td>⛨</td></tr>
+      <tr><td>Pause</td><td>P / Esc</td><td>II</td></tr>
+    </table>
+    <p>Your combat drone auto-fires once unlocked (clear level 3 or buy it in the Armory).</p>
+    <button class="back">◀ BACK</button>
+  </div>
+</div>
+
+<div id="pause" class="screen hidden">
+  <div class="panel">
+    <h2>PAUSED</h2>
+    <div class="col">
+      <button class="big" id="bResume">RESUME</button>
+      <button id="bRestart">RESTART</button>
+      <button id="bQuit">QUIT TO MENU</button>
+    </div>
+  </div>
+</div>
+
+<div id="end" class="screen hidden">
+  <div class="panel">
+    <h2 id="endTitle">MISSION COMPLETE</h2>
+    <div id="endStats"></div>
+    <div class="col">
+      <button class="big" id="bNext">NEXT LEVEL ▶</button>
+      <button id="bRetry">RETRY</button>
+      <button id="bEndMenu">MENU</button>
+    </div>
+  </div>
+</div>
+
+<div id="rotate"><div>⟲<br>Rotate your phone to landscape</div></div>
+
+<script type="module" src="game.js"></script>
+</body>
+</html>
